@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1a0x7k1" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.8.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+  <bpmn:process id="preparing-dinner" name="Preparing dinner" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="userTaskForm_0rcto79">{
+  "components": [
+    {
+      "values": [
+        {
+          "label": "Chicken",
+          "value": "Chicken"
+        },
+        {
+          "label": "Salad",
+          "value": "Salad"
+        }
+      ],
+      "label": "What's for dinner?",
+      "type": "select",
+      "id": "Field_062hcph",
+      "key": "meal",
+      "defaultValue": "&lt;none&gt;"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1rhkyql",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_1vz8b7z</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_1vz8b7z" sourceRef="StartEvent_1" targetRef="Activity_1cxqjp7" />
+    <bpmn:userTask id="Activity_1cxqjp7" name="Decide what&#39;s for dinner">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0rcto79" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1vz8b7z</bpmn:incoming>
+      <bpmn:outgoing>Flow_1tzdw6t</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0h53izy">
+      <bpmn:incoming>Flow_1tzdw6t</bpmn:incoming>
+      <bpmn:outgoing>Flow_0o89l4z</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0916qgq</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1tzdw6t" sourceRef="Activity_1cxqjp7" targetRef="Gateway_0h53izy" />
+    <bpmn:sequenceFlow id="Flow_0o89l4z" sourceRef="Gateway_0h53izy" targetRef="chicken">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=meal = "Chicken"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="chicken" name="Prep chicken">
+      <bpmn:incoming>Flow_0o89l4z</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ajof1n</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0916qgq" sourceRef="Gateway_0h53izy" targetRef="salad">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=meal = "Salad"</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="salad" name="Pre salad">
+      <bpmn:incoming>Flow_0916qgq</bpmn:incoming>
+      <bpmn:outgoing>Flow_1yofrxj</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_0rjwj0b">
+      <bpmn:incoming>Flow_0ajof1n</bpmn:incoming>
+      <bpmn:incoming>Flow_1yofrxj</bpmn:incoming>
+      <bpmn:outgoing>Flow_0eipb4r</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0ajof1n" sourceRef="chicken" targetRef="Gateway_0rjwj0b" />
+    <bpmn:sequenceFlow id="Flow_0eipb4r" sourceRef="Gateway_0rjwj0b" targetRef="eat-meal" />
+    <bpmn:userTask id="eat-meal" name="Eat meal">
+      <bpmn:incoming>Flow_0eipb4r</bpmn:incoming>
+      <bpmn:outgoing>Flow_13w6eth</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_13w6eth" sourceRef="eat-meal" targetRef="Event_1c9g8k7" />
+    <bpmn:endEvent id="Event_1c9g8k7">
+      <bpmn:incoming>Flow_13w6eth</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1yofrxj" sourceRef="salad" targetRef="Gateway_0rjwj0b" />
+    <bpmn:textAnnotation id="TextAnnotation_1u5sxj1">
+      <bpmn:text>Chicken or Salad?</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1shj5mz" sourceRef="Gateway_0h53izy" targetRef="TextAnnotation_1u5sxj1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="preparing-dinner">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0bavqh4_di" bpmnElement="Activity_1cxqjp7">
+        <dc:Bounds x="270" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0h53izy_di" bpmnElement="Gateway_0h53izy" isMarkerVisible="true">
+        <dc:Bounds x="455" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0h3rgni_di" bpmnElement="chicken">
+        <dc:Bounds x="610" y="50" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0kgyqem_di" bpmnElement="salad">
+        <dc:Bounds x="610" y="240" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0rjwj0b_di" bpmnElement="Gateway_0rjwj0b" isMarkerVisible="true">
+        <dc:Bounds x="815" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1yttqa3_di" bpmnElement="eat-meal">
+        <dc:Bounds x="930" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1c9g8k7_di" bpmnElement="Event_1c9g8k7">
+        <dc:Bounds x="1112" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1u5sxj1_di" bpmnElement="TextAnnotation_1u5sxj1">
+        <dc:Bounds x="530" y="162" width="100" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1vz8b7z_di" bpmnElement="Flow_1vz8b7z">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="270" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1tzdw6t_di" bpmnElement="Flow_1tzdw6t">
+        <di:waypoint x="370" y="177" />
+        <di:waypoint x="455" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0o89l4z_di" bpmnElement="Flow_0o89l4z">
+        <di:waypoint x="480" y="152" />
+        <di:waypoint x="480" y="90" />
+        <di:waypoint x="610" y="90" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0916qgq_di" bpmnElement="Flow_0916qgq">
+        <di:waypoint x="480" y="202" />
+        <di:waypoint x="480" y="280" />
+        <di:waypoint x="610" y="280" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ajof1n_di" bpmnElement="Flow_0ajof1n">
+        <di:waypoint x="710" y="90" />
+        <di:waypoint x="840" y="90" />
+        <di:waypoint x="840" y="152" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0eipb4r_di" bpmnElement="Flow_0eipb4r">
+        <di:waypoint x="865" y="177" />
+        <di:waypoint x="930" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13w6eth_di" bpmnElement="Flow_13w6eth">
+        <di:waypoint x="1030" y="177" />
+        <di:waypoint x="1112" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1shj5mz_di" bpmnElement="Association_1shj5mz">
+        <di:waypoint x="505" y="177" />
+        <di:waypoint x="530" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yofrxj_di" bpmnElement="Flow_1yofrxj">
+        <di:waypoint x="710" y="280" />
+        <di:waypoint x="840" y="280" />
+        <di:waypoint x="840" y="202" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

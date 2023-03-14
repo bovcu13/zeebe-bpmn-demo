@@ -1,0 +1,30 @@
+{
+  "components": [
+    {
+      "values": [
+        {
+          "label": "Chicken",
+          "value": "Chicken"
+        },
+        {
+          "label": "Salad",
+          "value": "Salad"
+        }
+      ],
+      "label": "What's for dinner?",
+      "type": "select",
+      "id": "Field_062hcph",
+      "key": "meal",
+      "defaultValue": "<none>"
+    }
+  ],
+  "type": "default",
+  "id": "Form_1rhkyql",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.8.0"
+  },
+  "schemaVersion": 7
+}
