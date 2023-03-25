@@ -30,7 +30,7 @@ func Prep() {
 	variables["meal"] = "Salad"
 
 	//set ProcessDefinitionKey
-	client.NewCreateInstanceCommand().ProcessDefinitionKey(2251799813703902)
+	client.NewCreateInstanceCommand().ProcessDefinitionKey(2251799813686783)
 
 	jobWorker := client.NewJobWorker().JobType("io.camunda.zeebe:userTask").Handler(handleJobTwo).Open()
 
@@ -47,7 +47,7 @@ func handleJobTwo(client worker.JobClient, job entities.Job) {
 		failjob(client, job)
 		return
 	}
-	variables["time"] = "2023-03-03 12:12:12"
+	variables["time"] = "2023-03-03 12:25:12"
 	variables["name"] = "choc"
 	variables["feel"] = "5"
 

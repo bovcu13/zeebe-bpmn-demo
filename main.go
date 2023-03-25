@@ -3,5 +3,5 @@ package main
 import "github.com/zb-user/zb-example/demojob"
 
 func main() {
-	demojob.DecideDinner()
+	demojob.Prep()
 }

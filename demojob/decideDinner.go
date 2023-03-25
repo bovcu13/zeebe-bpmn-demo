@@ -6,7 +6,6 @@ import (
 	"log"
 
 	"github.com/camunda/zeebe/clients/go/v8/pkg/entities"
-	"github.com/camunda/zeebe/clients/go/v8/pkg/pb"
 	"github.com/camunda/zeebe/clients/go/v8/pkg/worker"
 	"github.com/camunda/zeebe/clients/go/v8/pkg/zbc"
 )
@@ -101,14 +100,14 @@ func failjob(client worker.JobClient, job entities.Job) {
 
 }
 
-func roleToString(role pb.Partition_PartitionBrokerRole) string {
-	switch role {
-	case pb.Partition_LEADER:
-		return "Leader"
-	case pb.Partition_FOLLOWER:
-		return "Follower"
-	default:
-		return "Unknown"
-	}
+// func roleToString(role pb.Partition_PartitionBrokerRole) string {
+// 	switch role {
+// 	case pb.Partition_LEADER:
+// 		return "Leader"
+// 	case pb.Partition_FOLLOWER:
+// 		return "Follower"
+// 	default:
+// 		return "Unknown"
+// 	}
 
-}
+// }
