@@ -1,87 +1,145 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1s4qip6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.6.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1s4qip6" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.6.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
   <bpmn:process id="Multi-Instance-test" name="Multi-Instance test" isExecutable="true">
-    <bpmn:startEvent id="Event_1gbeo6v">
-      <bpmn:outgoing>Flow_0dhzx8p</bpmn:outgoing>
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="userTaskForm_1kpa67e">{
+  "components": [
+    {
+      "values": [
+        {
+          "label": "病假",
+          "value": "sickLeave"
+        },
+        {
+          "label": "事假",
+          "value": "personalLeave"
+        },
+        {
+          "label": "公假",
+          "value": "officialLeave"
+        }
+      ],
+      "label": "請假選項",
+      "type": "checklist",
+      "id": "Field_05zapgb",
+      "key": "leaveType"
+    }
+  ],
+  "type": "default",
+  "id": "LeaveJobForm-Multi",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.6.0"
+  },
+  "schemaVersion": 5
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="userTaskForm_0ekgg0m">{
+  "components": [
+    {
+      "label": "status",
+      "type": "checkbox",
+      "id": "Field_0woltdu",
+      "key": "status",
+      "defaultValue": false
+    }
+  ],
+  "type": "default",
+  "id": "Form_1h9zgfj",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.6.0"
+  },
+  "schemaVersion": 5
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="Event_0zzir3j">
+      <bpmn:outgoing>Flow_04h21bv</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:subProcess id="Activity_1ahf03i" name="點餐">
-      <bpmn:incoming>Flow_17w7at5</bpmn:incoming>
+    <bpmn:sequenceFlow id="Flow_04h21bv" sourceRef="Event_0zzir3j" targetRef="leave-job" />
+    <bpmn:userTask id="leave-job" name="請假">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input source="=formData.leaveType" target="leaveType" />
+        </zeebe:ioMapping>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_1kpa67e" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04h21bv</bpmn:incoming>
+      <bpmn:incoming>Flow_00hs4mg</bpmn:incoming>
+      <bpmn:outgoing>Flow_0evxe3t</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0evxe3t" sourceRef="leave-job" targetRef="sir-check" />
+    <bpmn:userTask id="sir-check" name="主管審核">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0ekgg0m" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0evxe3t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ica3d0</bpmn:outgoing>
       <bpmn:multiInstanceLoopCharacteristics>
         <bpmn:extensionElements>
-          <zeebe:loopCharacteristics inputCollection="=member = [&#34;Jake&#34;,&#34;Finn&#34;]" />
+          <zeebe:loopCharacteristics inputCollection="=leaveType" inputElement="leaveTypeInstance" />
         </bpmn:extensionElements>
       </bpmn:multiInstanceLoopCharacteristics>
-      <bpmn:startEvent id="Event_0284l98">
-        <bpmn:outgoing>Flow_07x1fxd</bpmn:outgoing>
-      </bpmn:startEvent>
-      <bpmn:sequenceFlow id="Flow_07x1fxd" sourceRef="Event_0284l98" targetRef="Activity_0wy49ja" />
-      <bpmn:userTask id="Activity_0wy49ja" name="選擇口味">
-        <bpmn:incoming>Flow_07x1fxd</bpmn:incoming>
-        <bpmn:outgoing>Flow_0t8mhvq</bpmn:outgoing>
-      </bpmn:userTask>
-      <bpmn:userTask id="Activity_1aqbu1y" name="結算訂單">
-        <bpmn:incoming>Flow_0t8mhvq</bpmn:incoming>
-        <bpmn:outgoing>Flow_0xt48wf</bpmn:outgoing>
-      </bpmn:userTask>
-      <bpmn:endEvent id="Event_1y0qks5">
-        <bpmn:incoming>Flow_0xt48wf</bpmn:incoming>
-      </bpmn:endEvent>
-      <bpmn:sequenceFlow id="Flow_0xt48wf" sourceRef="Activity_1aqbu1y" targetRef="Event_1y0qks5" />
-      <bpmn:sequenceFlow id="Flow_0t8mhvq" sourceRef="Activity_0wy49ja" targetRef="Activity_1aqbu1y" />
-    </bpmn:subProcess>
-    <bpmn:sequenceFlow id="Flow_0dhzx8p" sourceRef="Event_1gbeo6v" targetRef="Activity_1py9c7z" />
-    <bpmn:sequenceFlow id="Flow_17w7at5" sourceRef="Activity_1py9c7z" targetRef="Activity_1ahf03i" />
-    <bpmn:userTask id="Activity_1py9c7z" name="統計人數">
-      <bpmn:extensionElements />
-      <bpmn:incoming>Flow_0dhzx8p</bpmn:incoming>
-      <bpmn:outgoing>Flow_17w7at5</bpmn:outgoing>
     </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_1rd6gco">
+      <bpmn:incoming>Flow_1ica3d0</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lyzbh5</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00hs4mg</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1ica3d0" sourceRef="sir-check" targetRef="Gateway_1rd6gco" />
+    <bpmn:endEvent id="Event_11usika">
+      <bpmn:incoming>Flow_0lyzbh5</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0lyzbh5" sourceRef="Gateway_1rd6gco" targetRef="Event_11usika">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_00hs4mg" sourceRef="Gateway_1rd6gco" targetRef="leave-job">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Multi-Instance-test">
-      <bpmndi:BPMNShape id="Event_1gbeo6v_di" bpmnElement="Event_1gbeo6v">
-        <dc:Bounds x="182" y="162" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_0zzir3j_di" bpmnElement="Event_0zzir3j">
+        <dc:Bounds x="182" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0hc866y_di" bpmnElement="Activity_1py9c7z">
-        <dc:Bounds x="300" y="140" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0f6rzjw_di" bpmnElement="Activity_1ahf03i" isExpanded="true">
-        <dc:Bounds x="490" y="80" width="570" height="200" />
+      <bpmndi:BPMNShape id="Activity_12d4f6k_di" bpmnElement="leave-job">
+        <dc:Bounds x="270" y="150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1pq5art_di" bpmnElement="Activity_0wy49ja">
-        <dc:Bounds x="620" y="140" width="100" height="80" />
+      <bpmndi:BPMNShape id="Gateway_1rd6gco_di" bpmnElement="Gateway_1rd6gco" isMarkerVisible="true">
+        <dc:Bounds x="685" y="165" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_11usika_di" bpmnElement="Event_11usika">
+        <dc:Bounds x="792" y="172" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nspk2p_di" bpmnElement="sir-check">
+        <dc:Bounds x="470" y="150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0284l98_di" bpmnElement="Event_0284l98">
-        <dc:Bounds x="522.3333333333333" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0pus04q_di" bpmnElement="Activity_1aqbu1y">
-        <dc:Bounds x="820" y="140" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1y0qks5_di" bpmnElement="Event_1y0qks5">
-        <dc:Bounds x="992" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_07x1fxd_di" bpmnElement="Flow_07x1fxd">
-        <di:waypoint x="558" y="180" />
-        <di:waypoint x="620" y="180" />
+      <bpmndi:BPMNEdge id="Flow_04h21bv_di" bpmnElement="Flow_04h21bv">
+        <di:waypoint x="218" y="190" />
+        <di:waypoint x="270" y="190" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0xt48wf_di" bpmnElement="Flow_0xt48wf">
-        <di:waypoint x="920" y="180" />
-        <di:waypoint x="992" y="180" />
+      <bpmndi:BPMNEdge id="Flow_00hs4mg_di" bpmnElement="Flow_00hs4mg">
+        <di:waypoint x="710" y="165" />
+        <di:waypoint x="710" y="80" />
+        <di:waypoint x="320" y="80" />
+        <di:waypoint x="320" y="150" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0t8mhvq_di" bpmnElement="Flow_0t8mhvq">
-        <di:waypoint x="720" y="180" />
-        <di:waypoint x="820" y="180" />
+      <bpmndi:BPMNEdge id="Flow_0evxe3t_di" bpmnElement="Flow_0evxe3t">
+        <di:waypoint x="370" y="190" />
+        <di:waypoint x="470" y="190" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0dhzx8p_di" bpmnElement="Flow_0dhzx8p">
-        <di:waypoint x="218" y="180" />
-        <di:waypoint x="300" y="180" />
+      <bpmndi:BPMNEdge id="Flow_1ica3d0_di" bpmnElement="Flow_1ica3d0">
+        <di:waypoint x="570" y="190" />
+        <di:waypoint x="685" y="190" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_17w7at5_di" bpmnElement="Flow_17w7at5">
-        <di:waypoint x="400" y="180" />
-        <di:waypoint x="490" y="180" />
+      <bpmndi:BPMNEdge id="Flow_0lyzbh5_di" bpmnElement="Flow_0lyzbh5">
+        <di:waypoint x="735" y="190" />
+        <di:waypoint x="792" y="190" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

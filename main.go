@@ -1,7 +1,11 @@
 package main
 
-import "github.com/zb-user/zb-example/demojob"
+import (
+	"fmt"
+
+	"github.com/zb-user/zb-example/demojob"
+)
 
 func main() {
-	demojob.Prep()
+	fmt.Println(demojob.FindJobKeysByProcessInstanceKey("2251799813721794"))
 }
