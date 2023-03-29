@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-	"time"
 
 	"github.com/camunda/zeebe/clients/go/v8/pkg/zbc"
 )
@@ -68,6 +67,7 @@ func StartInstance(processId string, variables map[string]interface{}) (string, 
 func FindJobKeysByProcessInstanceKey(processInstanceKey int64) ([]int64, error) {
 	client, err := NewZeebeClient()
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
@@ -75,26 +75,65 @@ func FindJobKeysByProcessInstanceKey(processInstanceKey int64) ([]int64, error) 
 	response, err := client.NewActivateJobsCommand().
 		JobType("io.camunda.zeebe:userTask").
 		MaxJobsToActivate(100).
-		WorkerName("my-worker").
-		Timeout(time.Minute).
 		Send(context.Background())
+
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
+
 	for _, job := range response {
-		headers, ok := job.GetCustomHeadersAsMap()
-		if ok {
-			if myHeaders, ok := headers["ProcessInstanceKey"].(string); ok {
-				isEqual := myHeaders == processInstanceKey
-				if isEqual {
-					taskJobKeys = append(taskJobKeys, job.GetKey())
-				}
+		headers, err := job.GetCustomHeadersAsMap()
+
+		fmt.Println(headers)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+		if myHeaders, ok := headers["ProcessInstanceKey"]; ok {
+			if fmt.Sprint(myHeaders) == fmt.Sprint(processInstanceKey) {
+				taskJobKeys = append(taskJobKeys, job.GetKey())
 			}
+		}
+
+		if err != nil {
+			log.Fatal(err)
 		}
 	}
 
 	return taskJobKeys, nil
 }
+
+// func FindJobKeysByProcessInstanceKey1(processInstanceKey int64) ([]int64, error) {
+// 	client, err := NewZeebeClient()
+// 	if err != nil {
+// 		return nil, err
+// 	}
+
+// 	var taskJobKeys []int64
+// 	response, err := client.NewActivateJobsCommand().
+// 		JobType("io.camunda.zeebe:userTask").
+// 		MaxJobsToActivate(100).
+// 		WorkerName("my-worker").
+// 		Timeout(time.Minute).
+// 		Send(context.Background())
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	for _, job := range response {
+// 		headers, ok := job.GetCustomHeadersAsMap()
+// 		if ok {
+// 			if myHeaders, ok := headers["ProcessInstanceKey"].(string); ok {
+// 				isEqual := myHeaders == processInstanceKey
+// 				if isEqual {
+// 					taskJobKeys = append(taskJobKeys, job.GetKey())
+// 				}
+// 			}
+// 		}
+// 	}
+
+// 	return taskJobKeys, nil
+// }
 
 // 執行工作
 func CompleteJob(jobKey int64, key []string, value interface{}) {
