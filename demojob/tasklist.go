@@ -9,7 +9,8 @@ import (
 	"github.com/camunda/zeebe/clients/go/v8/pkg/zbc"
 )
 
-// 建立本地端
+// NewZeebeClient
+// @Description: 建立本地端
 func NewZeebeClient() (zbc.Client, error) {
 	config := zbc.ClientConfig{UsePlaintextConnection: true, GatewayAddress: "localhost:26500"}
 	client, err := zbc.NewClient(&config)
@@ -19,7 +20,8 @@ func NewZeebeClient() (zbc.Client, error) {
 	return client, nil
 }
 
-// 部署bpmn
+// DeployBPMNFile
+// @Description: 部署bpmn
 func DeployBPMNFile(fileName string) string {
 	ctx := context.Background()
 	client, err := NewZeebeClient()
@@ -37,7 +39,8 @@ func DeployBPMNFile(fileName string) string {
 	return response.String()
 }
 
-// 開啟一個流程實例
+// StartInstance
+// @Description: 開啟一個流程實例
 func StartInstance(processId string, variables map[string]interface{}) (string, error) {
 	client, err := NewZeebeClient()
 	if err != nil {
@@ -64,7 +67,8 @@ func StartInstance(processId string, variables map[string]interface{}) (string, 
 	return response.String(), nil
 }
 
-// FindUserTask 查詢 userTask 待完成任務資訊
+// FindUserTask
+// @Description: 查詢 userTask 待完成任務資訊
 func FindUserTask() {
 	client, err := NewZeebeClient()
 	if err != nil {
@@ -91,20 +95,13 @@ func FindUserTask() {
 	}
 }
 
-// 執行工作
-func CompleteJob(jobKey int64, key []string, value interface{}) {
+// CompleteJob
+// @Description: 執行工作
+func CompleteJob(jobKey int64, variables map[string]interface{}) {
 	client, err := NewZeebeClient()
 	if err != nil {
 		panic(err)
 	}
-
-	variables := make(map[string]interface{})
-	// 將字串陣列轉換為單一的字串
-	var keyStr string
-	for _, k := range key {
-		keyStr += k
-	}
-	variables[keyStr] = value
 
 	request, err := client.NewCompleteJobCommand().JobKey(jobKey).VariablesFromMap(variables)
 	if err != nil {
