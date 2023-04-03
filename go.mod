@@ -2,7 +2,10 @@ module github.com/zb-user/zb-example
 
 go 1.19
 
-require github.com/camunda/zeebe/clients/go/v8 v8.1.8
+require (
+	github.com/camunda/zeebe/clients/go/v8 v8.1.8
+	github.com/machinebox/graphql v0.2.2
+)
 
 require (
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 // indirect
@@ -25,4 +28,8 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-require github.com/rogpeppe/go-internal v1.9.0 // indirect
+require (
+	github.com/matryer/is v1.4.1 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
+	github.com/rogpeppe/go-internal v1.9.0 // indirect
+)

@@ -84,6 +84,25 @@ func StartInstance(processId string, variables map[string]interface{}) (string, 
 	return response.String(), nil
 }
 
+// CancelProcessInstance
+// @Description: 取消一個流程實例
+func CancelProcessInstance(processInstanceKey int64) (string, error) {
+	client, err := NewZeebeClient()
+	if err != nil {
+		panic(err)
+	}
+
+	request := client.NewCancelInstanceCommand().ProcessInstanceKey(processInstanceKey)
+	ctx := context.Background()
+	response, err := request.Send(ctx)
+	if err != nil {
+		return "", err
+	}
+	fmt.Println(response.String())
+
+	return fmt.Sprintf("Successfully cancelled process instance with key %d", processInstanceKey), nil
+}
+
 // FindUserTask
 // @Description: 查詢 userTask 所有待完成任務詳細資訊
 func FindUserTask() []info {
@@ -169,7 +188,100 @@ func GetJobInfoByProcessInstanceKey(processInstanceKey int64) []info {
 			result = append(result, info)
 		}
 	}
-	fmt.Println(result)
+	Marshal, _ := json.Marshal(result)
+	fmt.Println(string(Marshal))
+	return result
+}
+
+// GetJobInfoByProcessDefinitionKey
+// @Description: 查詢 userTask 中指定的 ProcessDefinitionKey 所有待完成任務詳細資訊
+func GetJobInfoByProcessDefinitionKey(processDefinitionKey int64) []info {
+	client, err := NewZeebeClient()
+	if err != nil {
+		panic(err)
+	}
+
+	request := client.NewActivateJobsCommand().
+		JobType("io.camunda.zeebe:userTask").
+		MaxJobsToActivate(100).
+		Timeout(time.Minute).
+		WorkerName("my-worker")
+
+	jobHeaders, err := request.Send(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	var result []info
+	for _, header := range jobHeaders {
+		if processDefinitionKey == header.GetProcessDefinitionKey() {
+			info := info{
+				JobType:                  header.GetType(),
+				ProcessId:                header.GetBpmnProcessId(),
+				Key:                      header.GetKey(),
+				ProcessInstanceKey:       header.GetProcessInstanceKey(),
+				ProcessDefinitionVersion: header.GetProcessDefinitionVersion(),
+				ProcessDefinitionKey:     header.GetProcessDefinitionKey(),
+				Variables:                header.GetVariables(),
+				ElementId:                header.GetElementId(),
+				ElementInstanceKey:       header.GetElementInstanceKey(),
+				CustomHeaders:            header.GetCustomHeaders(),
+				Worker:                   header.GetWorker(),
+				Retries:                  header.GetRetries(),
+				Deadline:                 header.GetDeadline(),
+			}
+
+			result = append(result, info)
+		}
+	}
+	Marshal, _ := json.Marshal(result)
+	fmt.Println(string(Marshal))
+	return result
+}
+
+// GetJobInfoByProcessId
+// @Description: 查詢 userTask 中指定的 processId 所有待完成任務詳細資訊
+func GetJobInfoByProcessId(processId string) []info {
+	client, err := NewZeebeClient()
+	if err != nil {
+		panic(err)
+	}
+
+	request := client.NewActivateJobsCommand().
+		JobType("io.camunda.zeebe:userTask").
+		MaxJobsToActivate(100).
+		Timeout(time.Minute).
+		WorkerName("my-worker")
+
+	jobHeaders, err := request.Send(context.Background())
+	if err != nil {
+		panic(err)
+	}
+
+	var result []info
+	for _, header := range jobHeaders {
+		if processId == header.GetBpmnProcessId() {
+			info := info{
+				JobType:                  header.GetType(),
+				ProcessId:                header.GetBpmnProcessId(),
+				Key:                      header.GetKey(),
+				ProcessInstanceKey:       header.GetProcessInstanceKey(),
+				ProcessDefinitionVersion: header.GetProcessDefinitionVersion(),
+				ProcessDefinitionKey:     header.GetProcessDefinitionKey(),
+				Variables:                header.GetVariables(),
+				ElementId:                header.GetElementId(),
+				ElementInstanceKey:       header.GetElementInstanceKey(),
+				CustomHeaders:            header.GetCustomHeaders(),
+				Worker:                   header.GetWorker(),
+				Retries:                  header.GetRetries(),
+				Deadline:                 header.GetDeadline(),
+			}
+
+			result = append(result, info)
+		}
+	}
+	Marshal, _ := json.Marshal(result)
+	fmt.Println(string(Marshal))
 	return result
 }
 
