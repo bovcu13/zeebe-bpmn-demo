@@ -10,7 +10,7 @@ import (
 	"github.com/camunda/zeebe/clients/go/v8/pkg/zbc"
 )
 
-type info struct {
+type Info struct {
 	JobType                  string `json:"jobType"`
 	ProcessId                string `json:"processId"`
 	Key                      int64  `json:"key"`
@@ -105,7 +105,7 @@ func CancelProcessInstance(processInstanceKey int64) (string, error) {
 
 // FindUserTask
 // @Description: 查詢 userTask 所有待完成任務詳細資訊
-func FindUserTask() []info {
+func FindUserTask() []Info {
 	client, err := NewZeebeClient()
 	if err != nil {
 		panic(err)
@@ -122,9 +122,9 @@ func FindUserTask() []info {
 		panic(err)
 	}
 
-	var result []info
+	var result []Info
 	for _, header := range jobHeaders {
-		info := info{
+		info := Info{
 			JobType:                  header.GetType(),
 			ProcessId:                header.GetBpmnProcessId(),
 			Key:                      header.GetKey(),
@@ -149,7 +149,7 @@ func FindUserTask() []info {
 
 // GetJobInfoByProcessInstanceKey
 // @Description: 查詢 userTask 中指定的 ProcessInstanceKey 所有待完成任務詳細資訊
-func GetJobInfoByProcessInstanceKey(processInstanceKey int64) []info {
+func GetJobInfoByProcessInstanceKey(processInstanceKey int64) []Info {
 	client, err := NewZeebeClient()
 	if err != nil {
 		panic(err)
@@ -166,10 +166,10 @@ func GetJobInfoByProcessInstanceKey(processInstanceKey int64) []info {
 		panic(err)
 	}
 
-	var result []info
+	var result []Info
 	for _, header := range jobHeaders {
 		if processInstanceKey == header.GetProcessInstanceKey() {
-			info := info{
+			info := Info{
 				JobType:                  header.GetType(),
 				ProcessId:                header.GetBpmnProcessId(),
 				Key:                      header.GetKey(),
@@ -195,7 +195,7 @@ func GetJobInfoByProcessInstanceKey(processInstanceKey int64) []info {
 
 // GetJobInfoByProcessDefinitionKey
 // @Description: 查詢 userTask 中指定的 ProcessDefinitionKey 所有待完成任務詳細資訊
-func GetJobInfoByProcessDefinitionKey(processDefinitionKey int64) []info {
+func GetJobInfoByProcessDefinitionKey(processDefinitionKey int64) []Info {
 	client, err := NewZeebeClient()
 	if err != nil {
 		panic(err)
@@ -212,10 +212,10 @@ func GetJobInfoByProcessDefinitionKey(processDefinitionKey int64) []info {
 		panic(err)
 	}
 
-	var result []info
+	var result []Info
 	for _, header := range jobHeaders {
 		if processDefinitionKey == header.GetProcessDefinitionKey() {
-			info := info{
+			info := Info{
 				JobType:                  header.GetType(),
 				ProcessId:                header.GetBpmnProcessId(),
 				Key:                      header.GetKey(),
@@ -241,7 +241,7 @@ func GetJobInfoByProcessDefinitionKey(processDefinitionKey int64) []info {
 
 // GetJobInfoByProcessId
 // @Description: 查詢 userTask 中指定的 processId 所有待完成任務詳細資訊
-func GetJobInfoByProcessId(processId string) []info {
+func GetJobInfoByProcessId(processId string) []Info {
 	client, err := NewZeebeClient()
 	if err != nil {
 		panic(err)
@@ -258,10 +258,10 @@ func GetJobInfoByProcessId(processId string) []info {
 		panic(err)
 	}
 
-	var result []info
+	var result []Info
 	for _, header := range jobHeaders {
 		if processId == header.GetBpmnProcessId() {
-			info := info{
+			info := Info{
 				JobType:                  header.GetType(),
 				ProcessId:                header.GetBpmnProcessId(),
 				Key:                      header.GetKey(),
