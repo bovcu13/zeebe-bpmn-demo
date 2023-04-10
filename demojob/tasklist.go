@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/camunda/zeebe/clients/go/v8/pkg/pb"
 	"log"
 	"time"
 
@@ -39,7 +40,7 @@ func NewZeebeClient() (zbc.Client, error) {
 
 // DeployBPMNFile
 // @Description: 部署bpmn
-func DeployBPMNFile(fileName string) string {
+func DeployBPMNFile(fileName string) (response *pb.DeployResourceResponse) {
 	ctx := context.Background()
 	client, err := NewZeebeClient()
 	if err != nil {
@@ -47,13 +48,13 @@ func DeployBPMNFile(fileName string) string {
 	}
 
 	// deploy BPMN file
-	response, err := client.NewDeployResourceCommand().AddResourceFile(fileName).Send(ctx)
+	response, err = client.NewDeployResourceCommand().AddResourceFile(fileName).Send(ctx)
 	if err != nil {
 		log.Fatalf("Failed to deploy BPMN file: %s", err)
 	}
 
 	// return deployment key
-	return response.String()
+	return response
 }
 
 // StartInstance
