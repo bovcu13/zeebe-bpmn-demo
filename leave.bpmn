@@ -4,14 +4,14 @@
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0te7n4t</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_0te7n4t" sourceRef="StartEvent_1" targetRef="Activity_0ujjv6h" />
-    <bpmn:userTask id="Activity_0ujjv6h" name="請假">
+    <bpmn:sequenceFlow id="Flow_0te7n4t" sourceRef="StartEvent_1" targetRef="leave" />
+    <bpmn:userTask id="leave" name="請假">
       <bpmn:incoming>Flow_0te7n4t</bpmn:incoming>
       <bpmn:incoming>Flow_11lrhyd</bpmn:incoming>
       <bpmn:outgoing>Flow_1iir28d</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_1iir28d" sourceRef="Activity_0ujjv6h" targetRef="Activity_1k69mc8" />
-    <bpmn:userTask id="Activity_1k69mc8" name="主管審核">
+    <bpmn:sequenceFlow id="Flow_1iir28d" sourceRef="leave" targetRef="sir-check" />
+    <bpmn:userTask id="sir-check" name="主管審核">
       <bpmn:incoming>Flow_1iir28d</bpmn:incoming>
       <bpmn:outgoing>Flow_1fzscie</bpmn:outgoing>
     </bpmn:userTask>
@@ -20,8 +20,8 @@
       <bpmn:outgoing>Flow_11lrhyd</bpmn:outgoing>
       <bpmn:outgoing>Flow_0w0sapg</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1fzscie" sourceRef="Activity_1k69mc8" targetRef="Gateway_0a48xaq" />
-    <bpmn:sequenceFlow id="Flow_11lrhyd" sourceRef="Gateway_0a48xaq" targetRef="Activity_0ujjv6h">
+    <bpmn:sequenceFlow id="Flow_1fzscie" sourceRef="sir-check" targetRef="Gateway_0a48xaq" />
+    <bpmn:sequenceFlow id="Flow_11lrhyd" sourceRef="Gateway_0a48xaq" targetRef="leave">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_15utpwv">
@@ -36,11 +36,11 @@
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1g1kn49_di" bpmnElement="Activity_0ujjv6h">
+      <bpmndi:BPMNShape id="Activity_1g1kn49_di" bpmnElement="leave">
         <dc:Bounds x="280" y="77" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0c1wtli_di" bpmnElement="Activity_1k69mc8">
+      <bpmndi:BPMNShape id="Activity_0c1wtli_di" bpmnElement="sir-check">
         <dc:Bounds x="280" y="290" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
@@ -54,11 +54,6 @@
         <di:waypoint x="215" y="117" />
         <di:waypoint x="280" y="117" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_11lrhyd_di" bpmnElement="Flow_11lrhyd">
-        <di:waypoint x="510" y="305" />
-        <di:waypoint x="510" y="117" />
-        <di:waypoint x="380" y="117" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1iir28d_di" bpmnElement="Flow_1iir28d">
         <di:waypoint x="330" y="157" />
         <di:waypoint x="330" y="290" />
@@ -66,6 +61,11 @@
       <bpmndi:BPMNEdge id="Flow_1fzscie_di" bpmnElement="Flow_1fzscie">
         <di:waypoint x="380" y="330" />
         <di:waypoint x="485" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11lrhyd_di" bpmnElement="Flow_11lrhyd">
+        <di:waypoint x="510" y="305" />
+        <di:waypoint x="510" y="117" />
+        <di:waypoint x="380" y="117" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0w0sapg_di" bpmnElement="Flow_0w0sapg">
         <di:waypoint x="535" y="330" />
