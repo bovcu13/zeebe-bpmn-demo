@@ -4,7 +4,7 @@ go 1.19
 
 require (
 	github.com/camunda/zeebe/clients/go/v8 v8.1.8
-	github.com/machinebox/graphql v0.2.2
+	github.com/olekukonko/tablewriter v0.0.5
 )
 
 require (
@@ -29,7 +29,6 @@ require (
 )
 
 require (
-	github.com/matryer/is v1.4.1 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/mattn/go-runewidth v0.0.9 // indirect
 	github.com/rogpeppe/go-internal v1.9.0 // indirect
 )

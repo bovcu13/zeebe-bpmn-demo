@@ -60,7 +60,7 @@
       <bpmn:outgoing>Flow_04h21bv</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_04h21bv" sourceRef="Event_0zzir3j" targetRef="leave-job" />
-    <bpmn:userTask id="leave-job" name="請假">
+    <bpmn:userTask id="leave-job" name="面試人數">
       <bpmn:extensionElements>
         <zeebe:ioMapping>
           <zeebe:input source="=formData.leaveType" target="leaveType" />
@@ -109,25 +109,19 @@
         <dc:Bounds x="270" y="150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1nspk2p_di" bpmnElement="sir-check">
+        <dc:Bounds x="470" y="150" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1rd6gco_di" bpmnElement="Gateway_1rd6gco" isMarkerVisible="true">
         <dc:Bounds x="685" y="165" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_11usika_di" bpmnElement="Event_11usika">
         <dc:Bounds x="792" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nspk2p_di" bpmnElement="sir-check">
-        <dc:Bounds x="470" y="150" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_04h21bv_di" bpmnElement="Flow_04h21bv">
         <di:waypoint x="218" y="190" />
         <di:waypoint x="270" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00hs4mg_di" bpmnElement="Flow_00hs4mg">
-        <di:waypoint x="710" y="165" />
-        <di:waypoint x="710" y="80" />
-        <di:waypoint x="320" y="80" />
-        <di:waypoint x="320" y="150" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0evxe3t_di" bpmnElement="Flow_0evxe3t">
         <di:waypoint x="370" y="190" />
@@ -140,6 +134,12 @@
       <bpmndi:BPMNEdge id="Flow_0lyzbh5_di" bpmnElement="Flow_0lyzbh5">
         <di:waypoint x="735" y="190" />
         <di:waypoint x="792" y="190" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00hs4mg_di" bpmnElement="Flow_00hs4mg">
+        <di:waypoint x="710" y="165" />
+        <di:waypoint x="710" y="80" />
+        <di:waypoint x="320" y="80" />
+        <di:waypoint x="320" y="150" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
