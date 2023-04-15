@@ -10,7 +10,7 @@ import (
 
 func main() {
 	variables := map[string]interface{}{
-		"item": "Task Assignment",
+		"status": false,
 	}
 
 	jobHeaders := demojob.FindUserTask()
@@ -20,6 +20,7 @@ func main() {
 	var taskId int64
 	fmt.Scan(&taskId)
 	demojob.CompleteJob(taskId, variables)
+
 }
 
 func PrintJobInfoTable(jobHeaders []entities.Job) {

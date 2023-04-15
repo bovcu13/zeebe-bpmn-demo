@@ -4,6 +4,7 @@ go 1.19
 
 require (
 	github.com/camunda/zeebe/clients/go/v8 v8.1.8
+	github.com/go-resty/resty/v2 v2.7.0
 	github.com/olekukonko/tablewriter v0.0.5
 )
 

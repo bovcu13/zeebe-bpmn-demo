@@ -35,111 +35,84 @@
   },
   "schemaVersion": 5
 }</zeebe:userTaskForm>
-      <zeebe:userTaskForm id="userTaskForm_0ekgg0m">{
-  "components": [
-    {
-      "label": "status",
-      "type": "checkbox",
-      "id": "Field_0woltdu",
-      "key": "status",
-      "defaultValue": false
-    }
-  ],
-  "type": "default",
-  "id": "Form_1h9zgfj",
-  "executionPlatform": "Camunda Cloud",
-  "executionPlatformVersion": "8.1.0",
-  "exporter": {
-    "name": "Camunda Modeler",
-    "version": "5.6.0"
-  },
-  "schemaVersion": 5
-}</zeebe:userTaskForm>
     </bpmn:extensionElements>
     <bpmn:startEvent id="Event_0zzir3j">
       <bpmn:outgoing>Flow_04h21bv</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_04h21bv" sourceRef="Event_0zzir3j" targetRef="leave-job" />
-    <bpmn:userTask id="leave-job" name="面試人數">
+    <bpmn:sequenceFlow id="Flow_04h21bv" sourceRef="Event_0zzir3j" targetRef="noob-member" />
+    <bpmn:userTask id="noob-member" name="面試履歷">
       <bpmn:extensionElements>
-        <zeebe:ioMapping>
-          <zeebe:input source="=formData.leaveType" target="leaveType" />
-        </zeebe:ioMapping>
         <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_1kpa67e" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_04h21bv</bpmn:incoming>
-      <bpmn:incoming>Flow_00hs4mg</bpmn:incoming>
-      <bpmn:outgoing>Flow_0evxe3t</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0vo5id6</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0evxe3t" sourceRef="leave-job" targetRef="sir-check" />
-    <bpmn:userTask id="sir-check" name="主管審核">
-      <bpmn:extensionElements>
-        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0ekgg0m" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0evxe3t</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ica3d0</bpmn:outgoing>
-      <bpmn:multiInstanceLoopCharacteristics>
-        <bpmn:extensionElements>
-          <zeebe:loopCharacteristics inputCollection="=leaveType" inputElement="leaveTypeInstance" />
-        </bpmn:extensionElements>
-      </bpmn:multiInstanceLoopCharacteristics>
-    </bpmn:userTask>
-    <bpmn:exclusiveGateway id="Gateway_1rd6gco">
-      <bpmn:incoming>Flow_1ica3d0</bpmn:incoming>
-      <bpmn:outgoing>Flow_0lyzbh5</bpmn:outgoing>
-      <bpmn:outgoing>Flow_00hs4mg</bpmn:outgoing>
-    </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1ica3d0" sourceRef="sir-check" targetRef="Gateway_1rd6gco" />
-    <bpmn:endEvent id="Event_11usika">
-      <bpmn:incoming>Flow_0lyzbh5</bpmn:incoming>
+    <bpmn:subProcess id="Activity_0d2rnmz">
+      <bpmn:incoming>Flow_0vo5id6</bpmn:incoming>
+      <bpmn:outgoing>Flow_1np7cel</bpmn:outgoing>
+      <bpmn:startEvent id="Event_0l221n1">
+        <bpmn:outgoing>Flow_07e5ga9</bpmn:outgoing>
+      </bpmn:startEvent>
+      <bpmn:sequenceFlow id="Flow_07e5ga9" sourceRef="Event_0l221n1" targetRef="check" />
+      <bpmn:userTask id="check" name="審核">
+        <bpmn:incoming>Flow_07e5ga9</bpmn:incoming>
+        <bpmn:outgoing>Flow_0camk9f</bpmn:outgoing>
+      </bpmn:userTask>
+      <bpmn:endEvent id="Event_1c74m19">
+        <bpmn:incoming>Flow_0camk9f</bpmn:incoming>
+      </bpmn:endEvent>
+      <bpmn:sequenceFlow id="Flow_0camk9f" sourceRef="check" targetRef="Event_1c74m19" />
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="Flow_0vo5id6" sourceRef="noob-member" targetRef="Activity_0d2rnmz" />
+    <bpmn:endEvent id="Event_0lj14nd">
+      <bpmn:incoming>Flow_1np7cel</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0lyzbh5" sourceRef="Gateway_1rd6gco" targetRef="Event_11usika">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_00hs4mg" sourceRef="Gateway_1rd6gco" targetRef="leave-job">
-      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
-    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1np7cel" sourceRef="Activity_0d2rnmz" targetRef="Event_0lj14nd" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Multi-Instance-test">
       <bpmndi:BPMNShape id="Event_0zzir3j_di" bpmnElement="Event_0zzir3j">
         <dc:Bounds x="182" y="172" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_12d4f6k_di" bpmnElement="leave-job">
+      <bpmndi:BPMNShape id="Activity_12d4f6k_di" bpmnElement="noob-member">
         <dc:Bounds x="270" y="150" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1nspk2p_di" bpmnElement="sir-check">
-        <dc:Bounds x="470" y="150" width="100" height="80" />
+      <bpmndi:BPMNShape id="Event_0lj14nd_di" bpmnElement="Event_0lj14nd">
+        <dc:Bounds x="982" y="172" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0yhcvjr_di" bpmnElement="Activity_0d2rnmz" isExpanded="true">
+        <dc:Bounds x="480" y="40" width="390" height="300" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0l221n1_di" bpmnElement="Event_0l221n1">
+        <dc:Bounds x="520.3333333333333" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_02cnewp_di" bpmnElement="check">
+        <dc:Bounds x="610" y="160" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1rd6gco_di" bpmnElement="Gateway_1rd6gco" isMarkerVisible="true">
-        <dc:Bounds x="685" y="165" width="50" height="50" />
+      <bpmndi:BPMNShape id="Event_1c74m19_di" bpmnElement="Event_1c74m19">
+        <dc:Bounds x="772" y="182" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_11usika_di" bpmnElement="Event_11usika">
-        <dc:Bounds x="792" y="172" width="36" height="36" />
-      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_07e5ga9_di" bpmnElement="Flow_07e5ga9">
+        <di:waypoint x="556" y="200" />
+        <di:waypoint x="610" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0camk9f_di" bpmnElement="Flow_0camk9f">
+        <di:waypoint x="710" y="200" />
+        <di:waypoint x="772" y="200" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04h21bv_di" bpmnElement="Flow_04h21bv">
         <di:waypoint x="218" y="190" />
         <di:waypoint x="270" y="190" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0evxe3t_di" bpmnElement="Flow_0evxe3t">
+      <bpmndi:BPMNEdge id="Flow_0vo5id6_di" bpmnElement="Flow_0vo5id6">
         <di:waypoint x="370" y="190" />
-        <di:waypoint x="470" y="190" />
+        <di:waypoint x="480" y="190" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ica3d0_di" bpmnElement="Flow_1ica3d0">
-        <di:waypoint x="570" y="190" />
-        <di:waypoint x="685" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0lyzbh5_di" bpmnElement="Flow_0lyzbh5">
-        <di:waypoint x="735" y="190" />
-        <di:waypoint x="792" y="190" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_00hs4mg_di" bpmnElement="Flow_00hs4mg">
-        <di:waypoint x="710" y="165" />
-        <di:waypoint x="710" y="80" />
-        <di:waypoint x="320" y="80" />
-        <di:waypoint x="320" y="150" />
+      <bpmndi:BPMNEdge id="Flow_1np7cel_di" bpmnElement="Flow_1np7cel">
+        <di:waypoint x="870" y="190" />
+        <di:waypoint x="982" y="190" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
