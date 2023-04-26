@@ -2,26 +2,24 @@ package main
 
 import (
 	"fmt"
-	"net/http"
-
 	"github.com/go-resty/resty/v2"
+	"net/http"
 )
 
 func main() {
-	//variables := []map[string]string{
-	//	{
-	//		"name":  "meal",
-	//		"value": "\"Chicken\"",
-	//	},
-	//	{
-	//		"name":  "user",
-	//		"value": "\"demo\"",
-	//	},
-	//}
-	//CompleteTask("2251799813693348", variables)
 
-	GetTaskVariables("2251799813693348")
+	AssignTask("2251799813693381", "demo")
+	variables := []map[string]string{
+		{
+			"name":  "item",
+			"value": "\"Task Assignment\"",
+		},
+	}
+	CompleteTask("2251799813693381", variables)
 
+	//GetTaskVariables("2251799813693348")
+
+	//GetAllCreatedTasks()
 }
 
 // GetCookie

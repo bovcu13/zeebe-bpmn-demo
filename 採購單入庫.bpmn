@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1xf2yu8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.6.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
+  <bpmn:process id="PO-filing" name="採購單入庫" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0lf75kl</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:endEvent id="Event_1298bpo">
+      <bpmn:incoming>Flow_1ozpxpg</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:userTask id="POF" name="採購單據入庫">
+      <bpmn:extensionElements>
+        <zeebe:ioMapping>
+          <zeebe:input target="authentication.accessKey" />
+          <zeebe:input target="authentication.secretKey" />
+          <zeebe:input target="awsFunction.region" />
+          <zeebe:input source="sync" target="awsFunction.operationType" />
+          <zeebe:input target="awsFunction.functionName" />
+          <zeebe:input target="awsFunction.payload" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders />
+      </bpmn:extensionElements>
+      <bpmn:incoming>enter-POF</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ozpxpg</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0lf75kl" sourceRef="StartEvent_1" targetRef="quantity-check" />
+    <bpmn:userTask id="quantity-check" name="確認數量">
+      <bpmn:incoming>Flow_0lf75kl</bpmn:incoming>
+      <bpmn:outgoing>Flow_1quxe73</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_145k9iy">
+      <bpmn:incoming>Flow_1quxe73</bpmn:incoming>
+      <bpmn:outgoing>enter-POF</bpmn:outgoing>
+      <bpmn:outgoing>enter-partial</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1quxe73" sourceRef="quantity-check" targetRef="Gateway_145k9iy" />
+    <bpmn:sequenceFlow id="enter-POF" sourceRef="Gateway_145k9iy" targetRef="POF">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1ozpxpg" sourceRef="POF" targetRef="Event_1298bpo" />
+    <bpmn:sequenceFlow id="enter-partial" sourceRef="Gateway_145k9iy" targetRef="partial">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:userTask id="partial" name="部分入庫">
+      <bpmn:incoming>enter-partial</bpmn:incoming>
+      <bpmn:outgoing>enter-quantity-supplement</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="enter-quantity-supplement" sourceRef="partial" targetRef="quantity-supplement" />
+    <bpmn:userTask id="quantity-supplement" name="補在庫數量">
+      <bpmn:incoming>enter-quantity-supplement</bpmn:incoming>
+      <bpmn:incoming>Flow_1npyb4x</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ydubph</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:exclusiveGateway id="Gateway_09z5uag">
+      <bpmn:incoming>Flow_0ydubph</bpmn:incoming>
+      <bpmn:outgoing>Flow_1npyb4x</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1xwzapa</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0ydubph" sourceRef="quantity-supplement" targetRef="Gateway_09z5uag" />
+    <bpmn:sequenceFlow id="Flow_1npyb4x" sourceRef="Gateway_09z5uag" targetRef="quantity-supplement">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_0s6015i">
+      <bpmn:incoming>Flow_1xwzapa</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xwzapa" sourceRef="Gateway_09z5uag" targetRef="Event_0s6015i">
+      <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PO-filing">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1298bpo_di" bpmnElement="Event_1298bpo">
+        <dc:Bounds x="712" y="342" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0itwhpa_di" bpmnElement="POF">
+        <dc:Bounds x="550" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0uzh0cs_di" bpmnElement="quantity-check">
+        <dc:Bounds x="270" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_145k9iy_di" bpmnElement="Gateway_145k9iy" isMarkerVisible="true">
+        <dc:Bounds x="425" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0jfaeep_di" bpmnElement="partial">
+        <dc:Bounds x="550" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0sfi67n_di" bpmnElement="quantity-supplement">
+        <dc:Bounds x="730" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_09z5uag_di" bpmnElement="Gateway_09z5uag" isMarkerVisible="true">
+        <dc:Bounds x="915" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0s6015i_di" bpmnElement="Event_0s6015i">
+        <dc:Bounds x="1052" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0lf75kl_di" bpmnElement="Flow_0lf75kl">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="270" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1quxe73_di" bpmnElement="Flow_1quxe73">
+        <di:waypoint x="370" y="177" />
+        <di:waypoint x="425" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0tspyf7_di" bpmnElement="enter-POF">
+        <di:waypoint x="450" y="202" />
+        <di:waypoint x="450" y="360" />
+        <di:waypoint x="550" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1ozpxpg_di" bpmnElement="Flow_1ozpxpg">
+        <di:waypoint x="650" y="360" />
+        <di:waypoint x="712" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13v15lf_di" bpmnElement="enter-partial">
+        <di:waypoint x="475" y="177" />
+        <di:waypoint x="550" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1m22es3_di" bpmnElement="enter-quantity-supplement">
+        <di:waypoint x="650" y="177" />
+        <di:waypoint x="730" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ydubph_di" bpmnElement="Flow_0ydubph">
+        <di:waypoint x="830" y="177" />
+        <di:waypoint x="915" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1npyb4x_di" bpmnElement="Flow_1npyb4x">
+        <di:waypoint x="940" y="152" />
+        <di:waypoint x="940" y="100" />
+        <di:waypoint x="780" y="100" />
+        <di:waypoint x="780" y="137" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xwzapa_di" bpmnElement="Flow_1xwzapa">
+        <di:waypoint x="965" y="177" />
+        <di:waypoint x="1052" y="177" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
