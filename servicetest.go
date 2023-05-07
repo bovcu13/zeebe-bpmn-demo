@@ -41,9 +41,8 @@ func handleJob(client worker.JobClient, job entities.Job) {
 		return
 	}
 
-	variables = map[string]interface{}{
-		"name": "bovcu13",
-	}
+	variables["name"] = "bovcu13"
+
 	request, err := client.NewCompleteJobCommand().JobKey(jobKey).VariablesFromMap(variables)
 	if err != nil {
 		// failed to set the updated variables

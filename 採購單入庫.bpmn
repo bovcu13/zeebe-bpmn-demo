@@ -1,6 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:zeebe="http://camunda.org/schema/zeebe/1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_1xf2yu8" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.6.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
   <bpmn:process id="PO-filing" name="採購單入庫" isExecutable="true">
+    <bpmn:extensionElements>
+      <zeebe:userTaskForm id="userTaskForm_1sfmfou">{
+  "components": [
+    {
+      "label": "status",
+      "type": "checkbox",
+      "id": "Field_0woltdu",
+      "key": "status",
+      "defaultValue": false
+    }
+  ],
+  "type": "default",
+  "id": "Form_1h9zgfj",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.6.0"
+  },
+  "schemaVersion": 5
+}</zeebe:userTaskForm>
+      <zeebe:userTaskForm id="userTaskForm_0unee8v">{
+  "components": [
+    {
+      "label": "status",
+      "type": "checkbox",
+      "id": "Field_0woltdu",
+      "key": "status",
+      "defaultValue": false
+    }
+  ],
+  "type": "default",
+  "id": "Form_1h9zgfj",
+  "executionPlatform": "Camunda Cloud",
+  "executionPlatformVersion": "8.1.0",
+  "exporter": {
+    "name": "Camunda Modeler",
+    "version": "5.6.0"
+  },
+  "schemaVersion": 5
+}</zeebe:userTaskForm>
+    </bpmn:extensionElements>
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_0lf75kl</bpmn:outgoing>
     </bpmn:startEvent>
@@ -9,21 +51,16 @@
     </bpmn:endEvent>
     <bpmn:userTask id="POF" name="採購單據入庫">
       <bpmn:extensionElements>
-        <zeebe:ioMapping>
-          <zeebe:input target="authentication.accessKey" />
-          <zeebe:input target="authentication.secretKey" />
-          <zeebe:input target="awsFunction.region" />
-          <zeebe:input source="sync" target="awsFunction.operationType" />
-          <zeebe:input target="awsFunction.functionName" />
-          <zeebe:input target="awsFunction.payload" />
-        </zeebe:ioMapping>
         <zeebe:taskHeaders />
       </bpmn:extensionElements>
       <bpmn:incoming>enter-POF</bpmn:incoming>
       <bpmn:outgoing>Flow_1ozpxpg</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_0lf75kl" sourceRef="StartEvent_1" targetRef="quantity-check" />
-    <bpmn:userTask id="quantity-check" name="確認數量">
+    <bpmn:userTask id="quantity-check" name="確認採購數量">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_1sfmfou" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0lf75kl</bpmn:incoming>
       <bpmn:outgoing>Flow_1quxe73</bpmn:outgoing>
     </bpmn:userTask>
@@ -41,11 +78,15 @@
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:userTask id="partial" name="部分入庫">
+      <bpmn:extensionElements />
       <bpmn:incoming>enter-partial</bpmn:incoming>
       <bpmn:outgoing>enter-quantity-supplement</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="enter-quantity-supplement" sourceRef="partial" targetRef="quantity-supplement" />
     <bpmn:userTask id="quantity-supplement" name="補在庫數量">
+      <bpmn:extensionElements>
+        <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0unee8v" />
+      </bpmn:extensionElements>
       <bpmn:incoming>enter-quantity-supplement</bpmn:incoming>
       <bpmn:incoming>Flow_1npyb4x</bpmn:incoming>
       <bpmn:outgoing>Flow_0ydubph</bpmn:outgoing>
@@ -74,9 +115,6 @@
       <bpmndi:BPMNShape id="Event_1298bpo_di" bpmnElement="Event_1298bpo">
         <dc:Bounds x="712" y="342" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0itwhpa_di" bpmnElement="POF">
-        <dc:Bounds x="550" y="320" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0uzh0cs_di" bpmnElement="quantity-check">
         <dc:Bounds x="270" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -97,6 +135,9 @@
       <bpmndi:BPMNShape id="Event_0s6015i_di" bpmnElement="Event_0s6015i">
         <dc:Bounds x="1052" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0itwhpa_di" bpmnElement="POF">
+        <dc:Bounds x="560" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0lf75kl_di" bpmnElement="Flow_0lf75kl">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="270" y="177" />
@@ -108,10 +149,10 @@
       <bpmndi:BPMNEdge id="Flow_0tspyf7_di" bpmnElement="enter-POF">
         <di:waypoint x="450" y="202" />
         <di:waypoint x="450" y="360" />
-        <di:waypoint x="550" y="360" />
+        <di:waypoint x="560" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ozpxpg_di" bpmnElement="Flow_1ozpxpg">
-        <di:waypoint x="650" y="360" />
+        <di:waypoint x="660" y="360" />
         <di:waypoint x="712" y="360" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_13v15lf_di" bpmnElement="enter-partial">

@@ -5,17 +5,23 @@
       <bpmn:outgoing>Flow_0anwjtm</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0anwjtm" sourceRef="StartEvent_1" targetRef="call-microservice" />
-    <bpmn:serviceTask id="call-microservice" name="Call Microservice">
-      <bpmn:extensionElements>
-        <zeebe:taskDefinition type="orchestrate-something" />
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0anwjtm</bpmn:incoming>
-      <bpmn:outgoing>Flow_0q3j80h</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:endEvent id="Event_1w8r6u1">
       <bpmn:incoming>Flow_0q3j80h</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_0q3j80h" sourceRef="call-microservice" targetRef="Event_1w8r6u1" />
+    <bpmn:serviceTask id="call-microservice" name="Call Microservice">
+      <bpmn:extensionElements>
+        <zeebe:taskDefinition type="orchestrate-something" />
+        <zeebe:ioMapping>
+          <zeebe:output source="=name + &#34;:ok&#34;" target="result" />
+        </zeebe:ioMapping>
+        <zeebe:taskHeaders>
+          <zeebe:header key="test" value="test" />
+        </zeebe:taskHeaders>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0anwjtm</bpmn:incoming>
+      <bpmn:outgoing>Flow_0q3j80h</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_0pk2o76">

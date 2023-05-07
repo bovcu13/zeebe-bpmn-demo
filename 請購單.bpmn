@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0tte27b" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.6.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.1.0">
-  <bpmn:process id="purchase-request" name="採購申請單" isExecutable="true">
+  <bpmn:process id="purchase-request" name="Purchase Requisition" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1mrmtyp</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1mrmtyp" sourceRef="StartEvent_1" targetRef="pr-request" />
-    <bpmn:userTask id="pr-request" name="申請請購單送審">
+    <bpmn:sequenceFlow id="Flow_1mrmtyp" sourceRef="StartEvent_1" targetRef="create-pr" />
+    <bpmn:userTask id="create-pr" name="申請請購單送審">
       <bpmn:incoming>Flow_1mrmtyp</bpmn:incoming>
       <bpmn:outgoing>Flow_0iry4vd</bpmn:outgoing>
     </bpmn:userTask>
-    <bpmn:sequenceFlow id="Flow_0iry4vd" sourceRef="pr-request" targetRef="SIR-check" />
-    <bpmn:userTask id="SIR-check" name="單位主管審核">
+    <bpmn:sequenceFlow id="Flow_0iry4vd" sourceRef="create-pr" targetRef="sir-check" />
+    <bpmn:userTask id="sir-check" name="單位主管審核">
       <bpmn:incoming>Flow_0iry4vd</bpmn:incoming>
       <bpmn:incoming>Flow_00l9vgd</bpmn:incoming>
       <bpmn:outgoing>Flow_1ft98h9</bpmn:outgoing>
@@ -20,11 +20,11 @@
       <bpmn:outgoing>Flow_1vfgsa8</bpmn:outgoing>
       <bpmn:outgoing>Flow_0w4pu2w</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1ft98h9" sourceRef="SIR-check" targetRef="Gateway_11gj29e" />
-    <bpmn:sequenceFlow id="Flow_1vfgsa8" sourceRef="Gateway_11gj29e" targetRef="Director-check">
+    <bpmn:sequenceFlow id="Flow_1ft98h9" sourceRef="sir-check" targetRef="Gateway_11gj29e" />
+    <bpmn:sequenceFlow id="Flow_1vfgsa8" sourceRef="Gateway_11gj29e" targetRef="director-check">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="Director-check" name="處長審核">
+    <bpmn:userTask id="director-check" name="處長審核">
       <bpmn:incoming>Flow_1vfgsa8</bpmn:incoming>
       <bpmn:outgoing>Flow_1f0xasr</bpmn:outgoing>
     </bpmn:userTask>
@@ -33,11 +33,11 @@
       <bpmn:outgoing>Flow_19mc5pr</bpmn:outgoing>
       <bpmn:outgoing>Flow_0v00z1s</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1f0xasr" sourceRef="Director-check" targetRef="Gateway_0fcxjoc" />
-    <bpmn:sequenceFlow id="Flow_19mc5pr" sourceRef="Gateway_0fcxjoc" targetRef="GM-check">
+    <bpmn:sequenceFlow id="Flow_1f0xasr" sourceRef="director-check" targetRef="Gateway_0fcxjoc" />
+    <bpmn:sequenceFlow id="Flow_19mc5pr" sourceRef="Gateway_0fcxjoc" targetRef="gm-check">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="GM-check" name="總經理審核">
+    <bpmn:userTask id="gm-check" name="總經理審核">
       <bpmn:incoming>Flow_19mc5pr</bpmn:incoming>
       <bpmn:outgoing>Flow_1s65oyz</bpmn:outgoing>
     </bpmn:userTask>
@@ -46,11 +46,11 @@
       <bpmn:outgoing>Flow_0gxjs4h</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ypoa4v</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1s65oyz" sourceRef="GM-check" targetRef="Gateway_0e2ip9p" />
-    <bpmn:sequenceFlow id="Flow_0gxjs4h" sourceRef="Gateway_0e2ip9p" targetRef="PM-check">
+    <bpmn:sequenceFlow id="Flow_1s65oyz" sourceRef="gm-check" targetRef="Gateway_0e2ip9p" />
+    <bpmn:sequenceFlow id="Flow_0gxjs4h" sourceRef="Gateway_0e2ip9p" targetRef="pm-check">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:userTask id="PM-check" name="PM結案確認">
+    <bpmn:userTask id="pm-check" name="PM結案確認">
       <bpmn:incoming>Flow_0gxjs4h</bpmn:incoming>
       <bpmn:outgoing>Flow_0oxth5f</bpmn:outgoing>
     </bpmn:userTask>
@@ -59,7 +59,7 @@
       <bpmn:outgoing>Flow_12bon41</bpmn:outgoing>
       <bpmn:outgoing>Flow_1ewqibw</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_0oxth5f" sourceRef="PM-check" targetRef="Gateway_1u0sfug" />
+    <bpmn:sequenceFlow id="Flow_0oxth5f" sourceRef="pm-check" targetRef="Gateway_1u0sfug" />
     <bpmn:sequenceFlow id="Flow_12bon41" sourceRef="Gateway_1u0sfug" targetRef="Event_1x3pc1v">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = true</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
@@ -85,39 +85,39 @@
     <bpmn:sequenceFlow id="Flow_1ewqibw" sourceRef="Gateway_1u0sfug" targetRef="PRMOD">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">=status = false</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_00l9vgd" sourceRef="PRMOD" targetRef="SIR-check" />
+    <bpmn:sequenceFlow id="Flow_00l9vgd" sourceRef="PRMOD" targetRef="sir-check" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="purchase-request">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="279" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0p8nau2_di" bpmnElement="pr-request">
+      <bpmndi:BPMNShape id="Activity_0p8nau2_di" bpmnElement="create-pr">
         <dc:Bounds x="270" y="257" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1oexyhx_di" bpmnElement="SIR-check">
+      <bpmndi:BPMNShape id="Activity_1oexyhx_di" bpmnElement="sir-check">
         <dc:Bounds x="430" y="257" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_11gj29e_di" bpmnElement="Gateway_11gj29e" isMarkerVisible="true">
         <dc:Bounds x="595" y="272" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18ssbg1_di" bpmnElement="Director-check">
+      <bpmndi:BPMNShape id="Activity_18ssbg1_di" bpmnElement="director-check">
         <dc:Bounds x="570" y="390" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0fcxjoc_di" bpmnElement="Gateway_0fcxjoc" isMarkerVisible="true">
         <dc:Bounds x="725" y="405" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1gpwt89_di" bpmnElement="GM-check">
+      <bpmndi:BPMNShape id="Activity_1gpwt89_di" bpmnElement="gm-check">
         <dc:Bounds x="700" y="550" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0e2ip9p_di" bpmnElement="Gateway_0e2ip9p" isMarkerVisible="true">
         <dc:Bounds x="855" y="565" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_08ullhu_di" bpmnElement="PM-check">
+      <bpmndi:BPMNShape id="Activity_08ullhu_di" bpmnElement="pm-check">
         <dc:Bounds x="830" y="690" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
