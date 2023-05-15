@@ -42,6 +42,7 @@
     <bpmn:userTask id="Activity_1cxqjp7" name="Decide what&#39;s for dinner">
       <bpmn:extensionElements>
         <zeebe:formDefinition formKey="camunda-forms:bpmn:userTaskForm_0rcto79" />
+        <zeebe:assignmentDefinition assignee="manager" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1vz8b7z</bpmn:incoming>
       <bpmn:outgoing>Flow_1tzdw6t</bpmn:outgoing>
@@ -52,10 +53,16 @@
       <bpmn:outgoing>Flow_0916qgq</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="chicken" name="Prep chicken">
+      <bpmn:extensionElements>
+        <zeebe:assignmentDefinition assignee="demo" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0o89l4z</bpmn:incoming>
       <bpmn:outgoing>Flow_0ajof1n</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:userTask id="salad" name="Pre salad">
+      <bpmn:extensionElements>
+        <zeebe:assignmentDefinition assignee="demo" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0916qgq</bpmn:incoming>
       <bpmn:outgoing>Flow_1yofrxj</bpmn:outgoing>
     </bpmn:userTask>
@@ -65,6 +72,9 @@
       <bpmn:outgoing>Flow_0eipb4r</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:userTask id="eat-meal" name="Eat meal">
+      <bpmn:extensionElements>
+        <zeebe:assignmentDefinition assignee="manager" />
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0eipb4r</bpmn:incoming>
       <bpmn:outgoing>Flow_13w6eth</bpmn:outgoing>
     </bpmn:userTask>
@@ -92,10 +102,6 @@
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1edat5d">
       <bpmndi:BPMNShape id="Participant_0wittks_di" bpmnElement="Participant_0wittks" isHorizontal="true">
         <dc:Bounds x="129" y="80" width="1040" height="310" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1u5sxj1_di" bpmnElement="TextAnnotation_1u5sxj1">
-        <dc:Bounds x="530" y="212" width="100" height="41" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
@@ -128,10 +134,10 @@
       <bpmndi:BPMNShape id="Event_1c9g8k7_di" bpmnElement="Event_1c9g8k7">
         <dc:Bounds x="1112" y="209" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Association_1shj5mz_di" bpmnElement="Association_1shj5mz">
-        <di:waypoint x="505" y="227" />
-        <di:waypoint x="530" y="227" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="TextAnnotation_1u5sxj1_di" bpmnElement="TextAnnotation_1u5sxj1">
+        <dc:Bounds x="530" y="212" width="100" height="41" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1vz8b7z_di" bpmnElement="Flow_1vz8b7z">
         <di:waypoint x="215" y="227" />
         <di:waypoint x="270" y="227" />
@@ -167,6 +173,10 @@
       <bpmndi:BPMNEdge id="Flow_13w6eth_di" bpmnElement="Flow_13w6eth">
         <di:waypoint x="1030" y="227" />
         <di:waypoint x="1112" y="227" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_1shj5mz_di" bpmnElement="Association_1shj5mz">
+        <di:waypoint x="505" y="227" />
+        <di:waypoint x="530" y="227" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
